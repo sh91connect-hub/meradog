@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>MeraDog.sk · Návrh e-mail marketing systému</title>
+<meta content="Klientska HTML prezentácia pre MeraDog.sk — návrh e-mail marketing systému, ktorý pracuje s vlastným publikom a opakovanými nákupmi." name="description"/>
+<style>
+    :root {
+      --bg: #f8f3ea;
+      --bg-soft: #fffaf2;
+      --paper: #ffffff;
+      --ink: #191714;
+      --muted: #6b6257;
+      --line: rgba(25, 23, 20, .10);
+      --dark: #171411;
+      --dark-2: #231d18;
+      --orange: #f27a1a;
+      --orange-2: #ff9d2f;
+      --gold: #ffd36a;
+      --green: #4e8d54;
+      --red: #d8432e;
+      --cream: #fff2dc;
+      --grad: linear-gradient(135deg, #d8432e 0%, #f27a1a 48%, #ffd36a 100%);
+      --shadow: 0 24px 70px rgba(36, 28, 18, .10);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.58;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a { color: inherit; text-decoration: none; }
+    strong { color: var(--ink); }
+
+    /*
+      ============================================================
+      ASSETY PRE GITHUB
+      Vytvor priečinok /assets vedľa index.html a nahraj obrázky:
+
+      assets/almao-logo.webp
+      assets/stefan-hrusovsky.webp
+      assets/sablona-vino-hruska.png
+      assets/sablona-snackstore.png
+      assets/sablona-afra.png
+      assets/meradog-hero.png              voliteľné
+      assets/meradog-logo.png              voliteľné
+      ============================================================
+    */
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(248, 243, 234, .84);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 15px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: -.02em;
+    }
+    .brand-logo {
+      width: 118px;
+      height: auto;
+      display: block;
+    }
+    .brand-fallback {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--grad);
+      color: #fff;
+      font-weight: 950;
+    }
+    .nav-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .pill {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.62);
+      font-weight: 750;
+    }
+
+    .page { overflow: hidden; }
+    section {
+      position: relative;
+      padding: 94px 22px;
+    }
+    .section-soft { background: var(--bg); }
+    .section-paper { background: var(--bg-soft); }
+    .section-dark {
+      background: radial-gradient(circle at 15% 10%, rgba(242, 122, 26, .25), transparent 30%), var(--dark);
+      color: #fff;
+    }
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero {
+      min-height: 760px;
+      display: grid;
+      align-items: center;
+      background:
+        radial-gradient(circle at 78% 18%, rgba(255, 211, 106, .35), transparent 28%),
+        radial-gradient(circle at 12% 18%, rgba(242, 122, 26, .22), transparent 31%),
+        var(--bg-soft);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 46px;
+      align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      margin-bottom: 24px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 30px rgba(36, 28, 18, .06);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 850;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 900px;
+      margin-bottom: 24px;
+      font-size: clamp(48px, 7vw, 86px);
+      line-height: 1.03;
+      letter-spacing: -.045em;
+      font-weight: 940;
+    }
+    h2 {
+      max-width: 900px;
+      margin-bottom: 20px;
+      font-size: clamp(34px, 4.8vw, 62px);
+      line-height: 1.06;
+      letter-spacing: -.034em;
+      font-weight: 920;
+    }
+    h3 {
+      margin-bottom: 10px;
+      font-size: 24px;
+      line-height: 1.18;
+      letter-spacing: -.02em;
+      font-weight: 900;
+    }
+    .gradient-text {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .lead {
+      max-width: 810px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.72;
+    }
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+    .section-label::before {
+      content: "";
+      width: 38px;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--grad);
+    }
+    .section-dark .section-label { color: var(--gold); }
+
+    .hero-visual {
+      position: relative;
+      padding: 18px;
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,.65);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .image-slot {
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 211, 106, .42), transparent 34%),
+        linear-gradient(135deg, #fff4df, #f2dcc4);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: rgba(25,23,20,.45);
+      font-weight: 900;
+      letter-spacing: .04em;
+    }
+    .image-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .image-slot.missing::before {
+      content: attr(data-placeholder);
+      padding: 22px;
+      max-width: 280px;
+    }
+    .image-slot:not(.missing)::before { content: ""; }
+
+    .meta-strip {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      overflow: hidden;
+      border-radius: 24px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 38px rgba(36,28,18,.06);
+    }
+    .meta-strip div {
+      padding: 17px 18px;
+      border-right: 1px solid var(--line);
+    }
+    .meta-strip div:last-child { border-right: 0; }
+    .meta-k {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .meta-v {
+      display: block;
+      font-weight: 900;
+      line-height: 1.24;
+    }
+
+    .grid-2, .grid-3, .grid-4 {
+      display: grid;
+      gap: 22px;
+      margin-top: 42px;
+    }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .card {
+      border-radius: var(--radius-lg);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 30px;
+      box-shadow: 0 18px 44px rgba(36,28,18,.07);
+    }
+    .card p { color: var(--muted); margin-bottom: 0; }
+    .stat {
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .stat-number {
+      display: block;
+      margin-bottom: 16px;
+      font-size: clamp(44px, 5.5vw, 68px);
+      line-height: 1;
+      letter-spacing: -.045em;
+      font-weight: 950;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .stat-title {
+      font-size: 21px;
+      line-height: 1.28;
+      font-weight: 900;
+      letter-spacing: -.02em;
+    }
+
+    .dark-box {
+      margin-top: 32px;
+      padding: clamp(34px, 5vw, 54px);
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 90% 12%, rgba(255, 211, 106, .15), transparent 28%),
+        radial-gradient(circle at 10% 90%, rgba(242, 122, 26, .18), transparent 30%),
+        var(--dark);
+      color: #fff;
+      box-shadow: 0 28px 70px rgba(23,20,17,.25);
+    }
+    .dark-box p { color: rgba(255,255,255,.78); font-size: 19px; max-width: 900px; }
+    .dark-box h3 { font-size: clamp(28px, 4vw, 46px); }
+
+    .journey {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-top: 44px;
+    }
+    .journey-step {
+      position: relative;
+      padding: 22px;
+      min-height: 185px;
+      border-radius: 22px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    .journey-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--orange);
+      font-weight: 950;
+      z-index: 2;
+    }
+    .journey-step small {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--orange);
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .journey-step p { color: var(--muted); margin: 0; font-size: 15px; }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 24px;
+      margin-top: 44px;
+    }
+    .metric-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .metric-row:last-child { border-bottom: 0; }
+    .metric-name { font-weight: 920; }
+    .metric-sub { color: var(--muted); font-size: 14px; }
+    .metric-value {
+      font-size: 24px;
+      font-weight: 950;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      white-space: nowrap;
+    }
+    .proof-note { color: var(--muted); font-size: 14px; margin-top: 16px; }
+
+    .template-card { padding: 18px; }
+    .template-shot {
+      height: 540px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #fff6e8;
+    }
+    .template-shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      transition: transform .25s ease;
+    }
+    .template-shot:hover img { transform: scale(1.018); }
+    .template-caption { padding: 16px 4px 4px; }
+    .template-meta {
+      color: var(--orange);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .flow-card {
+      position: relative;
+      overflow: hidden;
+      padding: 32px;
+      border-radius: var(--radius-lg);
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 44px rgba(36,28,18,.07);
+    }
+    .flow-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 8px;
+      background: var(--grad);
+    }
+    .flow-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .flow-id {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: var(--cream);
+      font-size: 25px;
+    }
+    .bullets {
+      display: grid;
+      gap: 10px;
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+    }
+    .bullets li {
+      position: relative;
+      padding-left: 24px;
+    }
+    .bullets li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 950;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 18px;
+      margin-top: 44px;
+    }
+    .timeline-card {
+      min-height: 245px;
+      padding: 28px;
+      border-radius: 24px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 44px rgba(36,28,18,.07);
+    }
+    .num {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 22px;
+      border-radius: 16px;
+      background: var(--grad);
+      color: #fff;
+      font-weight: 950;
+    }
+
+    .cta-card {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .cta-left, .cta-right { padding: clamp(34px, 5vw, 58px); }
+    .cta-left { background: radial-gradient(circle at 12% 12%, rgba(255, 211, 106, .28), transparent 33%), var(--cream); }
+    .cta-right { border-left: 1px solid var(--line); }
+    .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 13px 20px;
+      border-radius: 999px;
+      background: var(--grad);
+      color: #fff;
+      font-weight: 950;
+      box-shadow: 0 16px 34px rgba(242,122,26,.26);
+    }
+    .btn.secondary {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+    .avatar-photo {
+      width: 98px;
+      height: 98px;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 28px;
+      margin-bottom: 22px;
+      border: 3px solid #fff;
+      box-shadow: 0 18px 42px rgba(242,122,26,.20);
+    }
+    .fallback-avatar {
+      width: 98px;
+      height: 98px;
+      display: grid;
+      place-items: center;
+      border-radius: 28px;
+      margin-bottom: 22px;
+      background: var(--grad);
+      color: #fff;
+      font-size: 34px;
+      font-weight: 950;
+    }
+
+    footer {
+      padding: 34px 22px;
+      background: var(--dark);
+      color: rgba(255,255,255,.62);
+      font-size: 14px;
+    }
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+
+
+    /* ÚPRAVA HERO SEKCIE: bez pravého horného boxu a banner na plnú šírku pod textom */
+    .nav { justify-content: flex-start; }
+    .hero-grid { display: block; }
+    .hero-copy { max-width: 980px; }
+    .hero .hero-visual {
+      margin-top: 34px;
+      width: 100%;
+      padding: 14px;
+    }
+    .hero .image-slot.hero-banner {
+      width: 100%;
+      min-height: 0;
+      aspect-ratio: 16 / 6;
+      background: #fff;
+    }
+    .hero .image-slot.hero-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      background: #fff;
+    }
+    @media (max-width: 640px) {
+      .hero .image-slot.hero-banner { aspect-ratio: 16 / 9; }
+    }
+
+    @media (max-width: 980px) {
+      section { padding: 74px 20px; }
+      .hero { min-height: auto; }
+      .hero-grid, .grid-2, .grid-3, .grid-4, .proof-grid, .timeline, .cta-card, .meta-strip { grid-template-columns: 1fr; }
+      .journey { grid-template-columns: 1fr; }
+      .journey-step:not(:last-child)::after { display: none; }
+      .meta-strip div { border-right: 0; border-bottom: 1px solid var(--line); }
+      .meta-strip div:last-child { border-bottom: 0; }
+      .cta-right { border-left: 0; border-top: 1px solid var(--line); }
+      .image-slot { min-height: 310px; }
+    }
+    @media (max-width: 640px) {
+      .nav { align-items: flex-start; flex-direction: column; }
+      .nav-meta { justify-content: flex-start; }
+      h1 { font-size: clamp(42px, 14vw, 58px); }
+      h2 { font-size: clamp(32px, 10vw, 46px); }
+      .card, .flow-card, .dark-box, .timeline-card { padding: 24px; }
+      .template-shot { height: 440px; }
+      .btn { width: 100%; }
+    }
+    @media print {
+      .topbar { position: static; }
+      section { page-break-inside: avoid; padding: 44px 22px; }
+      .btn { border: 1px solid #ddd; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+<nav aria-label="Hlavná navigácia" class="nav">
+<a aria-label="Almao" class="brand" href="#top">
+<img alt="Almao" class="brand-logo" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'brand-fallback',textContent:'A'}))" src="assets/almao-logo.webp"/>
+</a>
+</nav>
+</header>
+
+<main id="top">
+
+<section aria-label="Úvod prezentácie" class="hero section-paper">
+<div class="container hero-grid">
+<div class="hero-copy">
+<div class="eyebrow">🐶 Návrh e-mail marketingu pre MeraDog.sk</div>
+<h1><span class="gradient-text">Z návštevníka kontakt.</span><br/>Zo zákazníka pravidelný nákup.</h1>
+<p class="lead">
+MeraDog predáva produkty, pri ktorých sa zákazník prirodzene vracia. Krmivo sa míňa, pes alebo mačka má svoje potreby a správne nastavená komunikácia vie zákazníkovi pomôcť vybrať, pripomenúť sa v správnom čase a podporiť ďalšiu objednávku.
+<br/><br/>
+Cieľom tohto návrhu nie je posielať viac e-mailov. Cieľom je vytvoriť jednoduchý a zmysluplný systém, ktorý bude pracovať s vlastným publikom, zníži závislosť od platenej návštevnosti a pomôže budovať opakované nákupy.
+</p>
+</div>
+
+<div class="hero-visual">
+<div class="image-slot hero-banner" data-placeholder="Voliteľný obrázok: assets/meradog-hero.png">
+<img alt="MeraDog banner" onerror="this.closest('.image-slot').classList.add('missing'); this.remove();" src="assets/meradog-hero.png"/>
+</div>
+</div>
+
+<div class="meta-strip">
+<div><span class="meta-k">E-shop</span><span class="meta-v">MeraDog.sk</span></div>
+<div><span class="meta-k">Nástroj</span><span class="meta-v">Ecomail</span></div>
+<div><span class="meta-k">Fokus</span><span class="meta-v">pes / mačka · vek · typ produktu</span></div>
+<div><span class="meta-k">Cieľ</span><span class="meta-v">vlastné publikum a opakované nákupy</span></div>
+</div>
+</div>
+</section>
+
+<section class="section-soft" id="preco">
+<div class="container">
+<span class="section-label">Prečo to dáva zmysel</span>
+<h2>Krmivo je ideálny sortiment pre e-mail marketing.</h2>
+<p class="lead">
+Pri krmive nejde o jednorazový impulzívny nákup. Zákazník vyberá podľa toho, či nakupuje pre psa alebo mačku, podľa veku zvieraťa a typu produktu. Keď nájde značku, ktorej dôveruje, je veľká šanca, že sa bude vracať opakovane.
+</p>
+
+<div class="grid-3">
+<article class="card stat">
+<div>
+<span class="stat-number">1.</span>
+<div class="stat-title">Návšteva ešte nie je kontakt</div>
+</div>
+<p>Ak človek príde na e-shop a odíde bez e-mailu, pri ďalšom oslovení ste znovu odkázaní na reklamu, vyhľadávanie alebo náhodu.</p>
+</article>
+
+<article class="card stat">
+<div>
+<span class="stat-number">2.</span>
+<div class="stat-title">Prvý nákup ešte nie je vzťah</div>
+</div>
+<p>Po prvej objednávke je ideálny moment poďakovať, uistiť zákazníka, získať spätnú väzbu a pripraviť pôdu pre ďalší nákup.</p>
+</article>
+
+<article class="card stat">
+<div>
+<span class="stat-number">3.</span>
+<div class="stat-title">Krmivo má cyklus spotreby</div>
+</div>
+<p>Ak zákazník nakupuje opakovane použiteľný produkt, dáva zmysel pracovať s pripomenutím, reaktiváciou a návratom do e-shopu.</p>
+</article>
+</div>
+</div>
+</section>
+
+<section class="section-paper" id="vlastne-publikum">
+<div class="container">
+<span class="section-label">Vlastné publikum</span>
+<h2>Najlacnejší kontakt je ten, ktorý už máte.</h2>
+<p class="lead">
+Reklama je výborná na privedenie nových ľudí. E-mail marketing pomáha z tejto návštevnosti vyťažiť viac. Keď zákazník zanechá kontakt alebo nakúpi, už nemusíte každý ďalší dotyk kupovať znova cez platené kanály.
+</p>
+
+<div class="grid-2">
+<article class="flow-card">
+<div class="flow-top"><span class="flow-id">Hlavná výhoda</span><span class="icon">📩</span></div>
+<h3>Databáza ako vlastný obchodný kanál</h3>
+<p>
+E-mailová databáza je publikum, ktoré si značka buduje sama. Dá sa s ním pracovať podľa záujmu, nákupného správania a toho, v akej fáze sa zákazník nachádza.
+</p>
+</article>
+
+<article class="flow-card">
+<div class="flow-top"><span class="flow-id">Pre MeraDog</span><span class="icon">🐾</span></div>
+<h3>Komunikácia podľa potreby zákazníka</h3>
+<p>
+Nie každý zákazník rieši to isté. Niekto nakupuje krmivo pre psa, niekto pre mačku, niekto rieši šteňa alebo mačiatko, niekto pravidelné krmivo alebo maškrty. Práve tu dáva segmentovaná komunikácia zmysel.
+</p>
+</article>
+</div>
+</div>
+</section>
+
+<section class="section-soft" id="cesta-zakaznika">
+<div class="container">
+<span class="section-label">Zákaznícka cesta</span>
+<h2>E-mailing má kopírovať to, ako človek reálne nakupuje.</h2>
+<p class="lead">
+Cieľom nie je poslať viac e-mailov. Cieľom je poslať správny e-mail v správnej chvíli podľa toho, či človek ešte iba vyberá, váha, nakúpil alebo sa už dlhšie nevrátil.
+</p>
+
+<div class="journey">
+<div class="journey-step"><small>01</small><h3>Návšteva</h3><p>Človek príde z reklamy, vyhľadávania, odporúčania alebo priamej návštevy.</p></div>
+<div class="journey-step"><small>02</small><h3>Záujem</h3><p>Vyberá podľa toho, či nakupuje pre psa alebo mačku, podľa veku zvieraťa a typu produktu.</p></div>
+<div class="journey-step"><small>03</small><h3>Košík</h3><p>Produkt vloží do košíka, ale nákup môže odložiť, porovnávať alebo sa k nemu vrátiť neskôr.</p></div>
+<div class="journey-step"><small>04</small><h3>Nákup</h3><p>Zákazník objedná a vzniká priestor pre podporu, dôveru a ďalší kontakt.</p></div>
+<div class="journey-step"><small>05</small><h3>Návrat</h3><p>Po čase môže zákazník potrebovať ďalšie krmivo, maškrty alebo iný produkt.</p></div>
+</div>
+</div>
+</section>
+
+<section class="section-paper" id="system">
+<div class="container">
+<span class="section-label">Návrh systému</span>
+<h2>Prvý e-mail marketingový systém pre MeraDog</h2>
+<p class="lead">
+Ako prvý krok dáva zmysel postaviť základné automatizácie, ktoré pokrývajú hlavné momenty zákazníckej cesty. Po konzultácii vyberieme presný rozsah podľa toho, čo má najväčší obchodný potenciál a ako sú dnes dostupné dáta v Ecomaili.
+</p>
+
+<div class="grid-2">
+<article class="flow-card">
+<div class="flow-top"><span class="flow-id">Automatizácia 01</span><span class="icon">👋</span></div>
+<h3>Uvítacia séria</h3>
+<p>Zachytí nový kontakt, predstaví značku a pomôže zistiť základnú preferenciu zákazníka.</p>
+<ul class="bullets">
+<li>pes alebo mačka</li>
+<li>vek zvieraťa a typ produktu</li>
+<li>nasmerovanie na relevantnejšiu komunikáciu</li>
+</ul>
+</article>
+
+<article class="flow-card">
+<div class="flow-top"><span class="flow-id">Automatizácia 02</span><span class="icon">🛒</span></div>
+<h3>Opustený košík</h3>
+<p>Pripomenie rozpracovaný nákup a vráti zákazníka späť k produktu, ktorý už zvažoval.</p>
+<ul class="bullets">
+<li>jemné pripomenutie bez agresívneho tlaku</li>
+<li>podpora rozhodnutia pri výbere</li>
+<li>návrat k objednávke, ktorá už bola rozpracovaná</li>
+</ul>
+</article>
+
+<article class="flow-card">
+<div class="flow-top"><span class="flow-id">Automatizácia 03</span><span class="icon">📦</span></div>
+<h3>Ponákupná komunikácia</h3>
+<p>Podpora po nákupe, ktorá buduje dôveru a vytvára priestor pre ďalší kontakt.</p>
+<ul class="bullets">
+<li>poďakovanie po objednávke</li>
+<li>kontrola spokojnosti</li>
+<li>recenzia alebo jemné nadviazanie na ďalší nákup</li>
+</ul>
+</article>
+
+<article class="flow-card">
+<div class="flow-top"><span class="flow-id">Automatizácia 04</span><span class="icon">🔁</span></div>
+<h3>Reaktivácia a návrat</h3>
+<p>Pracuje so zákazníkmi, ktorí dlhšie nenakúpili alebo nereagovali.</p>
+<ul class="bullets">
+<li>pripomenutie značky</li>
+<li>návrat do e-shopu</li>
+<li>možnosť nadviazať na posledný nákup alebo preferenciu</li>
+</ul>
+</article>
+</div>
+</div>
+</section>
+
+<section class="section-soft" id="ecomail">
+<div class="container">
+<span class="section-label">Ecomail</span>
+<h2>Rozsah nastavíme podľa dát, ktoré bude možné využiť.</h2>
+<p class="lead">
+Základné automatizácie, práca s kontaktmi, segmentácia a kampane sa dajú v Ecomaili postaviť veľmi dobre. Pokročilejšie veci, ako napríklad smart produktové odporúčania, sú však samostatná vyššia vrstva a dávajú zmysel až v ďalšej fáze podľa tarifu, dát a technického napojenia.
+</p>
+
+<div class="dark-box">
+<h3>Preto odporúčam ísť postupne</h3>
+<p>
+Najskôr postaviť funkčný základ: zachytenie kontaktu, uvítanie, opustený košík, ponákupovú komunikáciu a reaktiváciu. Až keď bude tento základ dávať dáta a výsledky, má zmysel rozširovať systém o pokročilejšiu personalizáciu.
+</p>
+</div>
+</div>
+</section>
+
+<section class="section-dark" id="dokaz">
+<div class="container">
+<span class="section-label">Dôkaz z praxe</span>
+<h2>Prečo to nie je len teória</h2>
+<p class="lead" style="color:rgba(255,255,255,.76)">
+Nižšie sú výsledky a ukážky z e-shopov, kde e-mail marketing už riešim. Nie sú garanciou rovnakých čísel pre MeraDog, ale ukazujú, čo vie dobre nastavený systém priniesť.
+</p>
+
+<div class="proof-grid">
+<article class="card">
+<h3>Automatizácie · Strelecký ráj</h3>
+<div class="metric-row"><div><div class="metric-name">Welcome séria</div><div class="metric-sub">Doručené 226 · Open 59,73 % · CTR 31,11 %</div></div><div class="metric-value">17 118 €</div></div>
+<div class="metric-row"><div><div class="metric-name">Opustený košík</div><div class="metric-sub">Doručené 192 · Open 38,02 % · CTR 27,40 %</div></div><div class="metric-value">2 788 €</div></div>
+<div class="metric-row"><div><div class="metric-name">Reaktivácia</div><div class="metric-sub">Doručené 866 · Open 53,35 % · CTR 56,49 %</div></div><div class="metric-value">1 067 €</div></div>
+<p class="proof-note">Výsledky závisia od databázy, sortimentu, cien, marže, sezóny a kvality technického nastavenia.</p>
+</article>
+
+<article class="card">
+<h3>Newslettery · Víno Hruška</h3>
+<div class="metric-row"><div><div class="metric-name">Body | Apríl/Máj</div><div class="metric-sub">Doručené 7 696 · CTR 4,33 %</div></div><div class="metric-value">48,65 % open</div></div>
+<div class="metric-row"><div><div class="metric-name">Mango Kir | SK</div><div class="metric-sub">Doručené 1 821 · CTR 2,64 %</div></div><div class="metric-value">36,52 % open</div></div>
+<div class="metric-row"><div><div class="metric-name">Body | SK</div><div class="metric-sub">Doručené 1 812 · CTR 4,36 %</div></div><div class="metric-value">29,97 % open</div></div>
+<p class="proof-note">Pri Víno Hruška ide hlavne o pravidelné kampane a prácu s databázou.</p>
+</article>
+</div>
+</div>
+</section>
+
+<section class="section-soft" id="ukazky">
+<div class="container">
+<span class="section-label">Ukážky šablón</span>
+<h2>Ako vyzerá moja práca v e-mailovej schránke</h2>
+<p class="lead">Žiadne generické drag &amp; drop výstupy. Custom HTML šablóny v identite značky, pripravené pre reálny inbox.</p>
+
+<div class="grid-3">
+<article class="card template-card">
+<a href="assets/sablona-vino-hruska.png" target="_blank" rel="noopener">
+<div class="template-shot image-slot" data-placeholder="assets/sablona-vino-hruska.png"><img alt="Ukážka e-mailu Víno Hruška" onerror="this.closest('.image-slot').classList.add('missing'); this.remove();" src="assets/sablona-vino-hruska.png"/></div>
+</a>
+<div class="template-caption"><div class="template-meta">Ukážka 1</div><h3>Welcome / vernostný e-mail</h3><p>Víno Hruška</p></div>
+</article>
+
+<article class="card template-card">
+<a href="assets/sablona-snackstore.png" target="_blank" rel="noopener">
+<div class="template-shot image-slot" data-placeholder="assets/sablona-snackstore.png"><img alt="Ukážka e-mailu Snackstore" onerror="this.closest('.image-slot').classList.add('missing'); this.remove();" src="assets/sablona-snackstore.png"/></div>
+</a>
+<div class="template-caption"><div class="template-meta">Ukážka 2</div><h3>Promo newsletter</h3><p>Snackstore</p></div>
+</article>
+
+<article class="card template-card">
+<a href="assets/sablona-afra.png" target="_blank" rel="noopener">
+<div class="template-shot image-slot" data-placeholder="assets/sablona-afra.png"><img alt="Ukážka e-mailu AFRA" onerror="this.closest('.image-slot').classList.add('missing'); this.remove();" src="assets/sablona-afra.png"/></div>
+</a>
+<div class="template-caption"><div class="template-meta">Ukážka 3</div><h3>Produktový newsletter</h3><p>AFRA</p></div>
+</article>
+</div>
+</div>
+</section>
+
+<section class="section-paper" id="prechod">
+<div class="container">
+<span class="section-label">Ďalší krok</span>
+<h2>Po tejto stratégii prirodzene prejdeme k rozsahu spolupráce.</h2>
+<p class="lead">
+Na spoločnom hovore si prejdeme tento návrh, doplníme kontext k MeraDog-u a následne navrhnem konkrétny rozsah spolupráce. Cenník bude postavený tak, aby dával zmysel obchodne aj technicky — od základného systému až po pokročilejšiu prácu s databázou.
+</p>
+
+<div class="timeline">
+<article class="timeline-card"><span class="num">01</span><h3>Prejdeme stratégiu</h3><p>Spoločne si vysvetlíme, čo má pre MeraDog najväčší potenciál.</p></article>
+<article class="timeline-card"><span class="num">02</span><h3>Doplníme realitu</h3><p>Prejdeme dáta, aktuálnu komunikáciu, e-shop a možnosti Ecomailu.</p></article>
+<article class="timeline-card"><span class="num">03</span><h3>Vyberieme priority</h3><p>Určíme, čo má ísť do prvej fázy a čo môže byť až ďalší krok.</p></article>
+<article class="timeline-card"><span class="num">04</span><h3>Navrhnem cenník</h3><p>Pripravím varianty spolupráce podľa rozsahu a obchodného potenciálu.</p></article>
+</div>
+</div>
+</section>
+
+<section class="section-soft" id="kontakt">
+<div class="container">
+<div class="cta-card">
+<div class="cta-left">
+<span class="section-label">Záver</span>
+<h2>Najprv zmysluplný systém. Potom výkon.</h2>
+<p class="lead">
+Pre MeraDog dáva najväčší zmysel začať automatizáciami, ktoré pokrývajú hlavné momenty nákupnej cesty: nový kontakt, košík, nákup a návrat zákazníka. Tak vznikne základ, na ktorom sa dá ďalej stavať.
+</p>
+<div class="btns">
+<a class="btn" href="mailto:s.hrusovsky@almao.cz?subject=MeraDog.sk%20-%20e-mail%20marketing">✉ Napísať Štefanovi</a>
+<a class="btn secondary" href="tel:+420705988788">Zavolať: +420 705 988 788</a>
+</div>
+</div>
+
+<div class="cta-right">
+<img alt="Štefan Hrušovský" class="avatar-photo" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'fallback-avatar',textContent:'ŠH'}))" src="assets/stefan-hrusovsky.webp"/>
+<h3>Štefan Hrušovský</h3>
+<p><strong>Almao · e-mail marketing</strong></p>
+<p style="color:var(--muted)">Pomáham menším a stredným e-shopom v SK/CZ trhu nastaviť e-mail marketing tak, aby nebol len o newsletteroch, ale o systéme na vlastné publikum a opakované nákupy.</p>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer>
+<div class="footer-inner">
+<span>© Almao · Štefan Hrušovský</span>
+<span>Pre MeraDog.sk</span>
+</div>
+</footer>
+</div>
+</body>
+</html>
